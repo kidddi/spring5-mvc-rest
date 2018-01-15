@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.mapper.OrderMapper;
 import guru.springfamework.api.v1.model.OrderDTO;
 import guru.springfamework.domain.Customer;
@@ -20,15 +19,13 @@ public class OrderServiceIpml implements OrderService {
 
 	private final OrderRepository orderRepository;
 	private final OrderMapper orderMapper;
-	private final CustomerRepository customerRepository;
-	private final CustomerMapper customerMapper;
+	private final CustomerRepository customerRepository;	
 
 	public OrderServiceIpml(OrderRepository orderRepository, OrderMapper orderMapper,
-			CustomerRepository customerRepository, CustomerMapper customerMapper) {
+			CustomerRepository customerRepository) {
 		this.orderRepository = orderRepository;
 		this.orderMapper = orderMapper;
-		this.customerRepository = customerRepository;
-		this.customerMapper = customerMapper;
+		this.customerRepository = customerRepository;		
 	}
 
 	@Override
@@ -58,8 +55,11 @@ public class OrderServiceIpml implements OrderService {
 
 	@Override
 	public OrderDTO getOrderDTOByCustomerId(Long customerId, Long orderId) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return getOrdersByCustomerId(customerId)
+				.stream()
+				.filter(order -> order.getId().equals(orderId))
+				.findFirst().get();
 	}
 
 }
