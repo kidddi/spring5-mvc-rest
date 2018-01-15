@@ -1,13 +1,11 @@
 package guru.springfamework.controllers.v1;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.ArgumentMatchers.*;
 
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,9 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import aj.org.objectweb.asm.Type;
 import guru.springfamework.api.v1.model.CustomerDTO;
-import guru.springfamework.domain.Customer;
 import guru.springfamework.services.CustomerService;
 
 public class CustomerControllerTest {
@@ -46,10 +42,10 @@ public class CustomerControllerTest {
 	public void testGetAllCustomers() throws Exception{
 		//given
 		CustomerDTO customer1 = new CustomerDTO();
-		customer1.setCustomerId("2");
+		customer1.setId(Long.valueOf(2));
 		
 		CustomerDTO customer2 = new CustomerDTO();
-		customer2.setCustomerId("3");
+		customer2.setId(Long.valueOf(3));
 		
 		List<CustomerDTO> customersDTO = Arrays.asList(customer1, customer2);
 		
@@ -65,9 +61,9 @@ public class CustomerControllerTest {
 	public void testGetCustomerById() throws Exception{
 
 		CustomerDTO customer = new CustomerDTO();
-		customer.setCustomerId("2");
+		customer.setId(Long.valueOf(2));
 		
-		when(customerService.getCustomerById(anyString())).thenReturn(customer);
+		when(customerService.getById(anyLong())).thenReturn(customer);
 		
 		mockMvc.perform(get("/api/v1/customers/2")
 				.contentType(MediaType.APPLICATION_JSON))

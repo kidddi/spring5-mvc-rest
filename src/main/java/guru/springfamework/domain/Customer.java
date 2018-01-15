@@ -1,6 +1,8 @@
 package guru.springfamework.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -22,10 +24,10 @@ public class Customer {
 	
 	private String firstName;
 	private String lastName;
-	private String customerId;
+//	private String customerId;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-	private Set<OrderObj> orders = new HashSet<>();
+	private List<OrderObj> orders = new ArrayList();
 	
 	public Customer addOrder(OrderObj order) {
 		this.orders.add(order);

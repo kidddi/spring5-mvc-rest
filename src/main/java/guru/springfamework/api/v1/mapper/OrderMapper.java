@@ -7,12 +7,13 @@ import org.mapstruct.factory.Mappers;
 import guru.springfamework.api.v1.model.OrderDTO;
 import guru.springfamework.domain.OrderObj;
 
+
 @Mapper
 public interface OrderMapper {
 	
 	OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 	
 	@Mapping(source = "id", target = "id")
+	@Mapping(source = "customer.id", target = "customerId")
 	OrderDTO orderObjToOrderDTO(OrderObj order);
-
 }

@@ -11,7 +11,4 @@ public interface OrderService {
 	List<OrderDTO> getOrdersByCustomerId(Long customerId);
 	
 	OrderDTO getOrderDTOByCustomerId(Long customerId, Long orderId);
-	
-	
-
 }

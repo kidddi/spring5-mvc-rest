@@ -2,15 +2,15 @@ package guru.springfamework.services;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import guru.springfamework.api.v1.mapper.CustomerMapper;
@@ -50,13 +50,14 @@ public class CustomerServiceTest {
 	public void testGetCustomerById() {
 		//given
 		Customer customer = new Customer();
-		customer.setCustomerId("2");
+		customer.setId(Long.valueOf(2));
 		customer.setFirstName("Jeck");
+		Optional<Customer> customerOptional = Optional.of(customer);
 		
-		when(customerRepository.findByCustomerId(anyString())).thenReturn(customer);
+		when(customerRepository.findById(anyLong())).thenReturn(customerOptional);
 		
 		//when
-		CustomerDTO customerDTO = customerService.getCustomerById("2");
+		CustomerDTO customerDTO = customerService.getById(Long.valueOf(2));
 		
 		//then
 		assertEquals("Jeck", customerDTO.getFirstName());	

@@ -6,5 +6,5 @@ import guru.springfamework.domain.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long>{
 
-	public Customer findByCustomerId(String id);
+//	public Customer findByCustomerId(Long id);
 }

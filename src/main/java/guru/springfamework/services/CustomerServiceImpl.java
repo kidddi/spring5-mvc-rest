@@ -30,9 +30,9 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public CustomerDTO getCustomerById(String id) {
+	public CustomerDTO getById(Long id) {
 
-		return customerMapper.customerToCustomerDTO(customerRepository.findByCustomerId(id));
+		return customerMapper.customerToCustomerDTO(customerRepository.findById(id).get());
 	}
 
 }
