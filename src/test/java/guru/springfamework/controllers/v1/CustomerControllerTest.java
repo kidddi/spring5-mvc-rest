@@ -2,7 +2,10 @@ package guru.springfamework.controllers.v1;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.*;
 
 
@@ -21,7 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.services.CustomerService;
 
-public class CustomerControllerTest {
+public class CustomerControllerTest extends AbstractRestControllerTest{
 	
 	@Mock
 	CustomerService customerService;
@@ -68,6 +71,28 @@ public class CustomerControllerTest {
 		mockMvc.perform(get("/api/v1/customers/2")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testCreateNewCustomer() throws Exception{
+		//given
+		CustomerDTO customer = new CustomerDTO();
+		customer.setFirstName("Fread");
+		customer.setLastName("Flingstone");
+		
+		CustomerDTO returnDTO = new CustomerDTO();
+		returnDTO.setFirstName(customer.getFirstName());
+		returnDTO.setLastName(customer.getLastName());
+		returnDTO.setCustomerUrl("/api/v1/customers/1");
+		
+		when(customerService.createNewCustomer(customer)).thenReturn(returnDTO);
+		
+		mockMvc.perform(post("/api/v1/customers/")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(customer)))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.firstName", equalTo("Fread")))
+			.andExpect(jsonPath("$.customerUrl", equalTo("/api/v1/customers/1")));
 	}
 
 }

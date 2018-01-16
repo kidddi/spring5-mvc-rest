@@ -3,6 +3,8 @@ package guru.springfamework.controllers.v1;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import guru.springfamework.api.v1.model.CustomerDTO;
@@ -13,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Controller
-@RequestMapping("/api/v1/customers/")
+@RequestMapping("/api/v1/customers")
 public class CustomerController {
 	
 	CustomerService customerService;
@@ -27,9 +29,13 @@ public class CustomerController {
 		return new ResponseEntity<CustomerListDTO>(new CustomerListDTO(customerService.getAllCustomers()), HttpStatus.OK);
 	}
 	
-	@GetMapping("{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable String id){
 		return new ResponseEntity<CustomerDTO>(customerService.getById(Long.valueOf(2)), HttpStatus.OK);
 	}
 
+	@PostMapping
+	public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO){
+		return new ResponseEntity<CustomerDTO>(customerService.createNewCustomer(customerDTO), HttpStatus.CREATED);
+	}
 }

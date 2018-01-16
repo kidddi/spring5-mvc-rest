@@ -21,7 +21,6 @@ public class Customer {
 	
 	private String firstName;
 	private String lastName;
-//	private String customerId;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
 	private List<OrderObj> orders = new ArrayList<>();

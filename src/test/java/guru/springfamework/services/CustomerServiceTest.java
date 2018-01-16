@@ -3,6 +3,7 @@ package guru.springfamework.services;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Arrays;
 import java.util.List;
@@ -61,6 +62,27 @@ public class CustomerServiceTest {
 		
 		//then
 		assertEquals("Jeck", customerDTO.getFirstName());	
+	}
+	
+	@Test
+	public void testCreateNewCustomer() throws Exception{
+		//given
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setFirstName("Joe");
+		
+		Customer savedCustomer = new Customer();
+		savedCustomer.setFirstName(customerDTO.getFirstName());
+		savedCustomer.setLastName(customerDTO.getLastName());
+		savedCustomer.setId(1L);
+		
+		when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+		
+		//when
+		CustomerDTO savedDTO = customerService.createNewCustomer(customerDTO);
+		
+		//then
+		assertEquals(customerDTO.getFirstName(), savedDTO.getFirstName());
+		assertEquals("/api/v1/customers/1", savedDTO.getCustomerUrl());
 	}
 
 }
