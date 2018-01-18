@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.model.CustomerDTO;
+import guru.springfamework.controllers.v1.CustomerController;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CustomerRepository;
 
@@ -26,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 		return customerRepository.findAll().stream().map(customer -> {
 			CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-			customerDTO.setCustomerUrl("/api/v1/customers/" + customer.getId());
+			customerDTO.setCustomerUrl(buildCustomerUrl(customer.getId()));
 			return customerDTO;
 		}).collect(Collectors.toList());
 	}
@@ -37,9 +38,9 @@ public class CustomerServiceImpl implements CustomerService {
 		// return
 		// customerMapper.customerToCustomerDTO(customerRepository.findById(id).get());
 		CustomerDTO customerDTO = customerRepository.findById(id).map(customerMapper::customerToCustomerDTO)				
-				.orElseThrow(RuntimeException::new);
+				.orElseThrow(ResourceNotFoundException::new);
 		
-		customerDTO.setCustomerUrl("/api/v1/customers/" + id);
+		customerDTO.setCustomerUrl(buildCustomerUrl(id));
 		return customerDTO;
 	}
 
@@ -55,7 +56,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 		CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
 
-		returnDTO.setCustomerUrl("/api/v1/customers/" + savedCustomer.getId());
+		returnDTO.setCustomerUrl(buildCustomerUrl(savedCustomer.getId()));
 
 		return returnDTO;
 	}
@@ -82,15 +83,18 @@ public class CustomerServiceImpl implements CustomerService {
 			}
 			
 			CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
-			returnDTO.setCustomerUrl("/api/v1/customers/" + id);
+			returnDTO.setCustomerUrl(buildCustomerUrl(id));
 			
 			return returnDTO;
-		}).orElseThrow(RuntimeException::new);
+		}).orElseThrow(ResourceNotFoundException::new);
+	}
+	
+	private String buildCustomerUrl(Long id) {
+		return CustomerController.BASE_URL + "/" + id;
 	}
 
 	@Override
 	public void deleteCustomerId(Long id) {
-		customerRepository.deleteById(id);
-		
+		customerRepository.deleteById(id);		
 	}
 }
