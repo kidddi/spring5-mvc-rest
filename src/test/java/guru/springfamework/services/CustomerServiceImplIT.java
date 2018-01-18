@@ -45,7 +45,7 @@ public class CustomerServiceImplIT {
 		System.out.println(customerRepository.findAll().size());
 		
 		//setup data for testing
-		Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, orderRepository);
+		Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, orderRepository, null, null);
 		bootstrap.run();//load data
 		
 		customerService = new CustomerServiceImpl(customerRepository, CustomerMapper.INSTANCE);

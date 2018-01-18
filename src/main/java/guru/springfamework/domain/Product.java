@@ -8,8 +8,8 @@ import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
-@Data
 @Entity
+@Data
 public class Product {
 	
 	@Id

@@ -1,5 +1,6 @@
 package guru.springfamework.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,8 +12,8 @@ import javax.persistence.OneToMany;
 
 import lombok.Data;
 
-@Data
 @Entity
+@Data
 public class Vendor {
 	
 	@Id
@@ -22,6 +23,12 @@ public class Vendor {
 	private String name;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vendor")
-	private List<Product> products;
+	private List<Product> products = new ArrayList<>();
+
+	public Vendor addProduct(Product product) {
+		this.products.add(product);
+		product.setVendor(this);
+		return this;
+	}
 
 }
