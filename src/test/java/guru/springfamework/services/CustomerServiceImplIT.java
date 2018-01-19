@@ -6,7 +6,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-
 import java.util.List;
 
 import org.junit.Before;
@@ -23,6 +22,8 @@ import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CategoryRepository;
 import guru.springfamework.repositories.CustomerRepository;
 import guru.springfamework.repositories.OrderRepository;
+import guru.springfamework.repositories.ProductRepository;
+import guru.springfamework.repositories.VendorRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -37,6 +38,12 @@ public class CustomerServiceImplIT {
 	@Autowired
 	OrderRepository orderRepository;
 	
+	@Autowired
+	VendorRepository vendorRepository;
+	
+	@Autowired
+	ProductRepository productRepository;
+	
 	CustomerService customerService;
 	
 	@Before
@@ -45,8 +52,10 @@ public class CustomerServiceImplIT {
 		System.out.println(customerRepository.findAll().size());
 		
 		//setup data for testing
-		Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, orderRepository, null, null);
+		Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, 
+				orderRepository, vendorRepository, productRepository);
 		bootstrap.run();//load data
+		
 		
 		customerService = new CustomerServiceImpl(customerRepository, CustomerMapper.INSTANCE);
 	}
@@ -73,6 +82,7 @@ public class CustomerServiceImplIT {
 		assertEquals(updatedName, updatedCustomer.getFirstName());
 		assertThat(originalFirstName, not(equalTo(updatedCustomer.getFirstName())));
 		assertThat(originalLastName, equalTo(updatedCustomer.getLastName()));
+		System.out.println("***************");
 	}
 	
 	@Test
@@ -80,7 +90,7 @@ public class CustomerServiceImplIT {
 		String updatedName = "UpdatedName";
 		long id = getCustomerIdValue();
 		
-		Customer originalCustomer = customerRepository.getOne(id);
+		Customer originalCustomer = customerRepository.findById(id).get();
 		assertNotNull(originalCustomer);
 		//save original first name
 		String originalFirstName = originalCustomer.getFirstName();

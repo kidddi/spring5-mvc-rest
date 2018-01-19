@@ -17,7 +17,7 @@ import guru.springfamework.repositories.ProductRepository;
 import guru.springfamework.repositories.VendorRepository;
 
 @Component
-@Profile({"dev"})
+@Profile({"prod"})
 public class Bootstrap implements CommandLineRunner{
 
 	private final CategoryRepository categoryRepository;

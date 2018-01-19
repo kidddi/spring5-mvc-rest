@@ -7,14 +7,13 @@ import org.springframework.stereotype.Service;
 
 import guru.springfamework.api.v1.mapper.VendorMapper;
 import guru.springfamework.api.v1.model.VendorDTO;
+import guru.springfamework.controllers.v1.VendorController;
 import guru.springfamework.domain.Vendor;
 import guru.springfamework.repositories.VendorRepository;
 
 @Service
 public class VendorServiceImpl implements VendorService {
 	
-	public static final String BASE_URL = "/api/v1/vendors";
-
 	private final VendorRepository vendorRepository;
 	
 	private final VendorMapper vendorMapper;
@@ -29,7 +28,7 @@ public class VendorServiceImpl implements VendorService {
 		
 		return vendorRepository.findAll().stream().map(vendor -> {
 			VendorDTO vendorDTO = vendorMapper.vendorToVendorDTO(vendor);
-			vendorDTO.setVendorUrl(buildVendorUrl(vendor.getId()));
+//			vendorDTO.setVendorUrl(buildVendorUrl(vendor.getId()));
 			return vendorDTO;
 		}).collect(Collectors.toList());
 	}
@@ -73,13 +72,16 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public VendorDTO patchVendor(Long id, VendorDTO vendorDTO) {
-		Vendor vendor = vendorRepository.findById(id)
-				.orElseThrow(ResourceNotFoundException::new);
-		
-		return null;
+		return vendorRepository.findById(id).map(vendor -> {
+			if (vendorDTO.getName() != null) {
+				vendor.setName(vendorDTO.getName());
+			}
+			VendorDTO returnVendor = vendorMapper.vendorToVendorDTO(vendorRepository.save(vendor));
+			return returnVendor;
+		}).orElseThrow(ResourceNotFoundException::new);
 	}	
 
 	private String buildVendorUrl(Long id) {
-		return BASE_URL + "/" + id;
+		return VendorController.BASE_URL + "/" + id;
 	}
 }

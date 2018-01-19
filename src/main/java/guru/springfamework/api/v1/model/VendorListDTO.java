@@ -9,6 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class VendorListDTO {
 	
-	private List<VendorDTO> vendorsDTO;
+	private List<VendorDTO> vendors;
 
 }

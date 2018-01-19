@@ -50,27 +50,19 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
 	@Test
 	public void testGetAllCustomers() throws Exception {
 		// given
-		CustomerDTO customer1 = new CustomerDTO();
-		customer1.setId(Long.valueOf(2));
-
-		CustomerDTO customer2 = new CustomerDTO();
-		customer2.setId(Long.valueOf(3));
-
-		List<CustomerDTO> customersDTO = Arrays.asList(customer1, customer2);
+		List<CustomerDTO> customersDTO = Arrays.asList(new CustomerDTO(), new CustomerDTO());
 
 		when(customerService.getAllCustomers()).thenReturn(customersDTO);
 
-		mockMvc.perform(get("/api/v1/customers/").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+		mockMvc.perform(get("/api/v1/customers/").contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk());
 
 	}
 
 	@Test
 	public void testGetCustomerById() throws Exception {
 
-		CustomerDTO customer = new CustomerDTO();
-		customer.setId(Long.valueOf(2));
-
-		when(customerService.getById(anyLong())).thenReturn(customer);
+		when(customerService.getById(anyLong())).thenReturn(new CustomerDTO());
 
 		mockMvc.perform(get("/api/v1/customers/2")
 				.contentType(MediaType.APPLICATION_JSON))

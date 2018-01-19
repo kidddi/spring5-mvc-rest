@@ -64,7 +64,7 @@ public class VendorServiceImplTest {
 		when(vendorRepository.findById(anyLong())).thenReturn(vendorOptional);
 		
 		//when
-		VendorDTO returnVendorDto = vendorService.getVendorById(ID);
+		VendorDTO returnVendorDto = vendorService.getVendorById(anyLong());
 		
 		//then
 		assertEquals(expectedVendorDTO.getId(), returnVendorDto.getId());
@@ -86,7 +86,7 @@ public class VendorServiceImplTest {
 		when(vendorRepository.save(any(Vendor.class))).thenReturn(vendor);
 		
 		//when
-		VendorDTO returnVendorDto = vendorService.createNewVendor(expectedVendorDTO);
+		VendorDTO returnVendorDto = vendorService.createNewVendor(new VendorDTO());
 		
 		//then
 		assertEquals(expectedVendorDTO.getId(), returnVendorDto.getId());
@@ -104,12 +104,24 @@ public class VendorServiceImplTest {
 
 	@Test
 	public void testUpdateVendor() {
-		fail("Not yet implemented");
+		//given
+		Vendor vendor = new Vendor();
+		vendor.setId(ID);
+		vendor.setName(NAME);
+		
+		VendorDTO expectedVendorDTO = new VendorDTO();
+		expectedVendorDTO.setId(vendor.getId());
+		expectedVendorDTO.setName(vendor.getName());
+		
+		when(vendorRepository.save(any(Vendor.class))).thenReturn(vendor);
+		
+		//when
+		VendorDTO returnVendorDto = vendorService.updateVendor(ID, new VendorDTO());
+		
+		//then
+		assertEquals(expectedVendorDTO.getId(), returnVendorDto.getId());
+		assertEquals(expectedVendorDTO.getName(), returnVendorDto.getName());
+		assertEquals("/api/v1/vendors/" + ID, returnVendorDto.getVendorUrl());
+		
 	}
-
-	@Test
-	public void testPatchVendor() {
-		fail("Not yet implemented");
-	}
-
 }
