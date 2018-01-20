@@ -1,7 +1,6 @@
 package guru.springfamework.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -36,8 +35,6 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerDTO getById(Long id) {
 
-		// return
-		// customerMapper.customerToCustomerDTO(customerRepository.findById(id).get());
 		CustomerDTO customerDTO = customerRepository.findById(id).map(customerMapper::customerToCustomerDTO)				
 				.orElseThrow(ResourceNotFoundException::new);
 		

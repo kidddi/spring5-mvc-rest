@@ -28,7 +28,7 @@ public class VendorServiceImpl implements VendorService {
 		
 		return vendorRepository.findAll().stream().map(vendor -> {
 			VendorDTO vendorDTO = vendorMapper.vendorToVendorDTO(vendor);
-//			vendorDTO.setVendorUrl(buildVendorUrl(vendor.getId()));
+			vendorDTO.setVendorUrl(buildVendorUrl(vendor.getId()));
 			return vendorDTO;
 		}).collect(Collectors.toList());
 	}
