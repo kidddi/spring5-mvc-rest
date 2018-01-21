@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.mapper.OrderMapper;
+import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.api.v1.model.OrderDTO;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CustomerRepository;
@@ -19,13 +21,15 @@ public class OrderServiceIpml implements OrderService {
 
 	private final OrderRepository orderRepository;
 	private final OrderMapper orderMapper;
-	private final CustomerRepository customerRepository;	
+	private final CustomerRepository customerRepository;
+	private final CustomerMapper customerMapper;
 
 	public OrderServiceIpml(OrderRepository orderRepository, OrderMapper orderMapper,
-			CustomerRepository customerRepository) {
+			CustomerRepository customerRepository, CustomerMapper customerMapper) {
 		this.orderRepository = orderRepository;
 		this.orderMapper = orderMapper;
-		this.customerRepository = customerRepository;		
+		this.customerRepository = customerRepository;
+		this.customerMapper = customerMapper;
 	}
 
 	@Override
@@ -62,4 +66,10 @@ public class OrderServiceIpml implements OrderService {
 				.findFirst().get();
 	}
 
+	@Override
+	public CustomerDTO createOrder(Long customerId, OrderDTO orderDTO) {
+		Customer customer = customerRepository.findById(customerId).orElseThrow(ResourceNotFoundException::new);
+		customer.addOrder(orderMapper.orderDTOToOrderObj(orderDTO));
+		return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+	}
 }

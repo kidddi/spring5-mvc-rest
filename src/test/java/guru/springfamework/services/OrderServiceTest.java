@@ -1,8 +1,11 @@
 package guru.springfamework.services;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +16,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.mapper.OrderMapper;
+import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.api.v1.model.OrderDTO;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.domain.OrderObj;
@@ -34,7 +39,8 @@ public class OrderServiceTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		
-		orderService = new OrderServiceIpml(orderRepository, OrderMapper.INSTANCE, customerRepository);	
+		orderService = new OrderServiceIpml(
+				orderRepository, OrderMapper.INSTANCE, customerRepository, CustomerMapper.INSTANCE);	
 	}
 
 	@Test
@@ -89,7 +95,22 @@ public class OrderServiceTest {
 		OrderDTO orderDTO = orderService.getOrderDTOByCustomerId(anyLong(), 4L);
 		
 		//then
-		assertEquals(order1.getTotal(), orderDTO.getTotal());		
+		assertEquals(order1.getTotal(), orderDTO.getTotal());
+	}
+	
+	@Test
+	public void testCreateOrder() {
+		Customer customer = new Customer();
+		customer.setId(1L);
+		customer.setFirstName("Joe");
+		
+		when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
+		when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+		
+		CustomerDTO savedCustomer = orderService.createOrder(1L, new OrderDTO());
+		
+		assertEquals("Joe", savedCustomer.getFirstName());
+		verify(customerRepository, times(1)).save(any());
 	}
 
 }
