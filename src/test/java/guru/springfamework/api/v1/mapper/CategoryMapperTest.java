@@ -8,23 +8,23 @@ import guru.springfamework.api.v1.model.CategoryDTO;
 import guru.springfamework.domain.Category;
 
 public class CategoryMapperTest {
-	
+
 	private static final long _1L = 1L;
 	private static final String JOE = "Joe";
 	CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
-	
+
 	@Test
 	public void categoryToCategoryDTO() {
-		
-		//given
+
+		// given
 		Category category = new Category();
 		category.setName(JOE);
 		category.setId(_1L);
-		
-		//when
+
+		// when
 		CategoryDTO categoryDTO = categoryMapper.categoryToCategoryDTO(category);
-		
-		//then
+
+		// then
 		assertEquals(Long.valueOf(_1L), categoryDTO.getId());
 		assertEquals(JOE, categoryDTO.getName());
 	}

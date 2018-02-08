@@ -10,6 +10,7 @@ import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.mapper.OrderMapper;
 import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.api.v1.model.OrderDTO;
+import guru.springfamework.controllers.v1.CustomerController;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CustomerRepository;
 import guru.springfamework.repositories.OrderRepository;
@@ -68,8 +69,13 @@ public class OrderServiceIpml implements OrderService {
 
 	@Override
 	public CustomerDTO createOrder(Long customerId, OrderDTO orderDTO) {
-		Customer customer = customerRepository.findById(customerId).orElseThrow(ResourceNotFoundException::new);
+		Customer customer = customerRepository.findById(customerId)
+				.orElseThrow(ResourceNotFoundException::new);
 		customer.addOrder(orderMapper.orderDTOToOrderObj(orderDTO));
-		return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+		
+		CustomerDTO returnCustomerDTO = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+		returnCustomerDTO.setCustomerUrl(CustomerController.BASE_URL + "/" + customerId); 
+		
+		return returnCustomerDTO;
 	}
 }
